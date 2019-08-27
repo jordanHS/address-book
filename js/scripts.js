@@ -38,7 +38,7 @@ AddressBook.prototype.deleteContact = function(id) {
 }
 
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber, email, Address) {
+function Contact(firstName, lastName, phoneNumber, email, address) {
   this.firstName = firstName,
   this.lastName = lastName,
   this.phoneNumber = phoneNumber,
@@ -54,17 +54,18 @@ Contact.prototype.fullName = function() {
 var addressBook = new AddressBook();
 
 $(document).ready(function() {
+  attachContactListeners();
   $("form#new-contact").submit(function(event) {
     event.preventDefault();
     var inputtedFirstName = $("input#new-first-name").val();
     var inputtedLastName = $("input#new-last-name").val();
     var inputtedPhoneNumber = $("input#new-phone-number").val();
     var inputtedEmail = $("input#new-email").val();
-    var inputtedAddress = $("input-new-address").val();
+    var inputtedAddress = $("input#new-address").val();
     var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmail, inputtedAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
-  })
+  });
 
   function displayContactDetails(addressBookToDisplay) {
     var contactsList = $("ul#contacts");
@@ -74,6 +75,26 @@ $(document).ready(function() {
     });
     contactsList.html(htmlForContactInfo);
   };
-
-
-})
+    function attachContactListeners() {
+    $("ul#contacts").on("click", "li", function() {
+      showContact(this.id);
+    $("#buttons").on("click", ".deleteButton", function() {
+     addressBook.deleteContact(this.id);
+     $("#show-contact").hide();
+     displayContactDetails(addressBook);
+    });
+    function showContact(contactId) {
+      var contact = addressBook.findContact(contactId);
+      $("#show-contact").show();
+      $(".first-name").html(contact.firstName);
+      $(".last-name").html(contact.lastName);
+      $(".phone-number").html(contact.phoneNumber);
+      $(".email").html(contact.email);
+      $(".address").html(contact.address);
+      var buttons = $("#buttons");
+      buttons.empty();
+      buttons.append("<button class='deleteButton' id=" +  + contact.id + ">Delete</button>");
+    }
+  });
+  };
+});
