@@ -14,19 +14,6 @@ AddressBook.prototype.assignId = function() {
   return this.currentId;
 }
 
-// Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber, emailAddress, Address) {
-  this.firstName = firstName,
-  this.lastName = lastName,
-  this.phoneNumber = phoneNumber
-  this.email = [personalEmail, workEmail]
-  this.address = address
-}
-
-Contact.prototype.fullName = function() {
-  return this.firstName + " " + this.lastName;
-}
-
 AddressBook.prototype.findContact = function(id) {
   for (var i=0; i< this.contacts.length; i++) {
      if (this.contacts[i]) {
@@ -49,3 +36,44 @@ AddressBook.prototype.deleteContact = function(id) {
   };
   return false;
 }
+
+// Business Logic for Contacts ---------
+function Contact(firstName, lastName, phoneNumber, email, Address) {
+  this.firstName = firstName,
+  this.lastName = lastName,
+  this.phoneNumber = phoneNumber,
+  this.email = email,
+  this.address = address
+}
+
+Contact.prototype.fullName = function() {
+  return this.firstName + " " + this.lastName;
+}
+
+// User Interface Logic ---------
+var addressBook = new AddressBook();
+
+$(document).ready(function() {
+  $("form#new-contact").submit(function(event) {
+    event.preventDefault();
+    var inputtedFirstName = $("input#new-first-name").val();
+    var inputtedLastName = $("input#new-last-name").val();
+    var inputtedPhoneNumber = $("input#new-phone-number").val();
+    var inputtedEmail = $("input#new-email").val();
+    var inputtedAddress = $("input-new-address").val();
+    var newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmail, inputtedAddress);
+    addressBook.addContact(newContact);
+    displayContactDetails(addressBook);
+  })
+
+  function displayContactDetails(addressBookToDisplay) {
+    var contactsList = $("ul#contacts");
+    var htmlForContactInfo = "";
+    addressBookToDisplay.contacts.forEach(function(contact) {
+      htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName + " " + contact.lastName + "</li>";
+    });
+    contactsList.html(htmlForContactInfo);
+  };
+
+
+})
