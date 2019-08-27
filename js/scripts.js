@@ -15,10 +15,12 @@ AddressBook.prototype.assignId = function() {
 }
 
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber) {
+function Contact(firstName, lastName, phoneNumber, emailAddress, Address) {
   this.firstName = firstName,
   this.lastName = lastName,
   this.phoneNumber = phoneNumber
+  this.email = [personalEmail, workEmail]
+  this.address = address
 }
 
 Contact.prototype.fullName = function() {
